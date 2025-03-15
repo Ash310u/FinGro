@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import ChatInput from './ChatInput';
 import Advisor from '../AI/advisor';
+
 const AssistantSearch = () => {
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef(null);
+    const { chatId } = useParams();
+    const navigate = useNavigate();
 
     // Auto scroll to bottom when new messages arrive
     const scrollToBottom = () => {
@@ -14,6 +18,85 @@ const AssistantSearch = () => {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    // Load chat data based on chatId
+    useEffect(() => {
+        const loadChatData = async () => {
+            if (chatId) {
+                try {
+                    const dummyChats = [
+                        {
+                            id: 1,
+                            title: 'Do have to pay tax on my investment gains if i have more than 1 lakh in my demat account?',
+                            chatList: [
+                                {
+                                    user: 'user',
+                                    message: 'Do have to pay tax on my investment gains if i have more than 1 lakh in my demat account?',
+                                },
+                                {
+                                    user: 'assistant',
+                                    message: `Yes, you have to pay tax on your investment gains if you have more than ₹1 lakh in your Demat account, but the tax depends on the type of gains:
+                                                1. Short-Term Capital Gains (STCG): If you sell stocks or mutual funds within 1 year, you pay 15% tax on the gains.
+                                                2. Long-Term Capital Gains (LTCG): If you sell stocks or mutual funds after 1 year, you pay 10% tax on gains exceeding ₹1 lakh in a financial year (without indexation).
+                                            So, the ₹1 lakh limit applies to long-term gains. If your total LTCG exceeds ₹1 lakh in a year, only the amount above ₹1 lakh is taxed.`,
+                                }
+                            ],
+                        },
+                        {
+                            id: 2,
+                            title: 'What are the best investment options in India as an 20 year old',
+                            chatList: [
+                                {
+                                    user: 'user',
+                                    message: 'What are the best investment options in India as an 20 year old',
+                                },
+                                {
+                                    user: 'assistant',
+                                    message: `Sure! Here's a quick list of investment options:
+                                            1. Equity Mutual Funds
+                                            2. Stocks  
+                                            3. Index Funds  
+                                            4. Public Provident Fund (PPF)  
+                                            5. Fixed Deposits (FD)  
+                                            6. Sovereign Gold Bonds (SGB)  
+                                            7. National Pension Scheme (NPS)  
+                                            8. Real Estate  
+                                            9. Systematic Investment Plan (SIP)  
+                                            10. Digital Gold  
+                                            11. Exchange-Traded Funds (ETFs)  
+                                            12. Cryptocurrency  
+
+                                            Let me know if you want more info on any!`,
+                                }
+                            ],
+                        }
+                    ];
+
+                    const selectedChat = dummyChats.find(chat => chat.id === parseInt(chatId));
+                    
+                    if (selectedChat) {
+                        // Convert the chat format to match our messages state
+                        const formattedMessages = selectedChat.chatList.map(item => ({
+                            role: item.user,
+                            content: item.message
+                        }));
+                        
+                        setMessages(formattedMessages);
+                    } else {
+                        // Handle chat not found
+                        navigate('/');
+                    }
+                } catch (error) {
+                    console.error('Error loading chat:', error);
+                }
+            } else {
+                // Clear messages for new chat
+                setMessages([]);
+            }
+        };
+
+        loadChatData();
+    }, [chatId, navigate]);
 
     const handleSendMessage = async (messageText) => {
         try {
@@ -25,6 +108,11 @@ const AssistantSearch = () => {
                 content: messageText,
             };
             setMessages(prev => [...prev, userMessage]);
+
+            // For a new chat, create a new chat and navigate to it
+            // if (!chatId) {
+                // navigate(`/chat/${dummyChats.length + 1}`);
+            // }
 
             const advisorResponse = await Advisor(messageText);
             

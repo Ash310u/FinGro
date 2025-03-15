@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import ChatOverview from './ChatOverview';
 
 const Lists = () => {
@@ -22,7 +23,7 @@ const Lists = () => {
                                     So, the ₹1 lakh limit applies to long-term gains. If your total LTCG exceeds ₹1 lakh in a year, only the amount above ₹1 lakh is taxed.`,
                     }
                 ],
-                chatTiming: '2021-01-01',
+                lastMessageTime: '2 hours ago',
             },
             {
                 id: 2,
@@ -35,7 +36,7 @@ const Lists = () => {
                     {
                         user: 'assistant',
                         message: `Sure! Here's a quick list of investment options:
-                                    m1. Equity Mutual Funds
+                                    1. Equity Mutual Funds
                                     2. Stocks  
                                     3. Index Funds  
                                     4. Public Provident Fund (PPF)  
@@ -51,33 +52,39 @@ const Lists = () => {
                                     Let me know if you want more info on any!`,
                     }
                 ],
-                chatTiming: '2021-01-01',
+                lastMessageTime: '1 day ago',
             }
         ])
     }, [])
+
     let content = chats.map((chat) => {
         return (
-            <ChatOverview key={chat.id} chat={chat} />
+            <Link to={`/chat/${chat.id}`} key={chat.id} className="block">
+                <ChatOverview chat={chat} />
+            </Link>
         )
     })
-  return (
-    <div className="w-72 bg-gray-900/80 backdrop-blur-lg border-r border-gray-800/50">
-        <div className="flex flex-col m-2 p-2">
-            <div className="flex flex-col">
-                <div className="font-bold text-2xl bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent p-4 flex items-center">
-                    <span className="relative text-emerald-400">
-                        Finplexity
-                        <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-gradient-to-r from-emerald-400 to-cyan-400 blur-sm"></span>
-                        <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-gradient-to-r from-emerald-400 to-cyan-400"></span>
-                    </span>
-                </div>
-                <div className="space-y-1">
-                    {content}
+    
+    return (
+        <div className="w-72 bg-gray-900/80 backdrop-blur-lg border-r border-gray-800/50">
+            <div className="flex flex-col m-2 p-2">
+                <div className="flex flex-col">
+                    <Link to="/" className="block">
+                        <div className="font-bold text-2xl bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent p-4 flex items-center">
+                            <span className="relative">
+                                Finplexity
+                                <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-gradient-to-r from-emerald-400 to-cyan-400 blur-sm"></span>
+                                <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-gradient-to-r from-emerald-400 to-cyan-400"></span>
+                            </span>
+                        </div>
+                    </Link>
+                    <div className="space-y-1">
+                        {content}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-  )
+    )
 }
 
 export default Lists;

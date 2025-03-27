@@ -139,7 +139,7 @@ const AssistantSearch = () => {
                 {/* Header with glowing accent */}
                 <div className="bg-gray-800/90 border-b border-emerald-500/30 p-3 flex items-center">
                     <div className="w-3 h-3 rounded-full bg-emerald-500 mr-2 animate-pulse"></div>
-                    <span className="text-emerald-400 font-medium tracking-wide text-sm">FinGrow AI</span>
+                    <span className="text-emerald-400 font-medium tracking-wide text-sm">FinGro AI</span>
                 </div>
                 
                 {/* Chat messages area */}

@@ -72,7 +72,7 @@ const Lists = () => {
                     <Link to="/" className="block">
                         <div className="font-bold text-2xl bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent p-4 flex items-center">
                             <span className="relative">
-                                FinGrow
+                                FinGro
                                 <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-gradient-to-r from-emerald-400 to-cyan-400 blur-sm"></span>
                                 <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-gradient-to-r from-emerald-400 to-cyan-400"></span>
                             </span>

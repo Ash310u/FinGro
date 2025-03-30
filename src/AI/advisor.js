@@ -2,7 +2,7 @@ import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 
 // Initialize the chat model
 const model = new ChatGoogleGenerativeAI({
-    modelName: "gemini-1.5-flash",
+    modelName: "gemini-2.0-flash",
     apiKey: import.meta.env.VITE_GEMINI_API_KEY,
     temperature: 0.8,
     maxOutputTokens: 2048,
@@ -23,53 +23,6 @@ Format your responses cleanly with these guidelines:
 6. Present investment options in a clean, structured format
 7. Remove any redundant phrases like "That's a great question!"`;
 
-// Function to clean response text
-function cleanResponse(text) {
-    // Remove excessive asterisks used for emphasis
-    let cleaned = text.replace(/\*\*/g, '');
-    cleaned = cleaned.replace(/\*/g, '');
-    
-    // Fix numbered lists formatting - ensure there's a line break before numbered items
-    // First, find all instances of a number followed by a dot that might be part of a list
-    const numberedListRegex = /(\s)(\d+)\.\s+/g;
-    
-    // Replace with a line break before the number
-    cleaned = cleaned.replace(numberedListRegex, '\n$2. ');
-    
-    // Handle case where a numbered list starts at the beginning of a paragraph
-    // Look for patterns where a number starts at beginning of line or after a period
-    cleaned = cleaned.replace(/(^|\.\s+)(\d+)\.\s+/g, '$1\n$2. ');
-    
-    // Fix bullet points formatting
-    cleaned = cleaned.replace(/\s*\*\s+/g, '\n• ');
-    
-    // Remove redundant phrases
-    const redundantPhrases = [
-        "That's a great question!",
-        "Great question.",
-        "That's an excellent question.",
-        "I'd be happy to help with that.",
-        "I'd be happy to explain.",
-        "Let me explain.",
-        "Let's explore this together."
-    ];
-    
-    redundantPhrases.forEach(phrase => {
-        cleaned = cleaned.replace(new RegExp(phrase, 'gi'), '');
-    });
-    
-    // Trim extra whitespace and normalize spacing
-    cleaned = cleaned.replace(/\n\s+/g, '\n');
-    cleaned = cleaned.replace(/\n{3,}/g, '\n\n');
-    
-    // Ensure we don't have a line break at the very beginning
-    cleaned = cleaned.replace(/^\n+/, '');
-    
-    // Final cleanup
-    cleaned = cleaned.trim();
-    
-    return cleaned;
-}
 
 async function Advisor(userInput) {
     try {
@@ -82,7 +35,7 @@ async function Advisor(userInput) {
         }];
 
         const response = await model.invoke(messages);
-        return cleanResponse(response.content);
+        return response;
 
     } catch (error) {
         console.error("Error in advisor:", error);

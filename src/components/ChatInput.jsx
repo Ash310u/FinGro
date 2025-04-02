@@ -35,7 +35,7 @@ const ChatInput = ({ onSendMessage }) => {
     <div className="w-full p-4">
       <form 
         onSubmit={handleSubmit}
-        className="max-w-3xl mx-auto relative bg-gray-800 rounded-lg shadow-xl border border-gray-700"
+        className="max-w-3xl mx-auto relative bg-white rounded-lg shadow-md border border-gray-200"
       >
         <textarea
           ref={textareaRef}
@@ -43,7 +43,7 @@ const ChatInput = ({ onSendMessage }) => {
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Ask about investments, taxes, savings, or financial planning..."
-          className="w-full bg-transparent text-white placeholder-gray-400 p-4 pr-12 resize-none overflow-hidden max-h-48 focus:outline-none"
+          className="w-full bg-transparent text-gray-800 placeholder-gray-500 p-4 pr-12 resize-none overflow-hidden max-h-48 focus:outline-none focus:ring-2 focus:ring-blue-100"
           rows={1}
         />
         <button
@@ -51,8 +51,8 @@ const ChatInput = ({ onSendMessage }) => {
           disabled={!message.trim()}
           className={`absolute right-2 bottom-3 p-2 rounded-lg transition-all duration-200 
             ${message.trim() 
-              ? 'bg-emerald-600 hover:bg-emerald-500 text-white' 
-              : 'bg-gray-700 text-gray-400'
+              ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+              : 'bg-gray-200 text-gray-400'
             }`}
         >
           <IoSend size={20} />

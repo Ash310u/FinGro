@@ -22,7 +22,7 @@ import Lists from './components/Lists';
 const App = () => {
     return (
       <Router>
-        <div className="bg-gray-900 flex flex-row h-screen">
+        <div className="bg-white flex flex-row h-screen shadow-sm">
           <Lists />
           <Routes>
             <Route path="/" element={<AssistantSearch />} />

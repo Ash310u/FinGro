@@ -4,11 +4,20 @@ import ChatOverview from './ChatOverview';
 import Button from './features/Button';
 import { GoPlus } from 'react-icons/go';
 import Modal from './features/Modal';
+import { MdKeyboardCommandKey } from "react-icons/md";
+import { FaPlus } from "react-icons/fa6";
+import { AiOutlineEnter } from "react-icons/ai";
+
 
 const Lists = () => {
+    console.log('Lists component rendered');
     const [chats, setChats] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [spaceName, setSpaceName] = useState('');
+    
+    const handleOpenModal = () => {
+        setShowModal(true);
+    }
     
     const handleSpaceNameChange = (e) => {
         setSpaceName(e.target.value);
@@ -16,6 +25,7 @@ const Lists = () => {
     
     const handleClose = () => {
         setShowModal(false);
+        setSpaceName('');
     }
     
     const handleCreateSpace = () => {
@@ -33,6 +43,32 @@ const Lists = () => {
             Done
         </Button>
     </div>
+    
+    // Add keyboard shortcut for Command + Enter to open modal
+    useEffect(() => {
+        console.log('useEffect for keyboard shortcut initialized');
+        const handleKeyDown = (event) => {
+            console.log('Key pressed:', event.key);
+            console.log('Meta key:', event.metaKey);
+            console.log('Ctrl key:', event.ctrlKey);
+            
+            // Check for Command/Meta + Enter key combination
+            if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+                console.log('Command + Enter detected');
+                event.preventDefault();
+                handleOpenModal();
+            }
+        };
+        
+        window.addEventListener('keydown', handleKeyDown);
+        
+        // Clean up event listener on component unmount
+        return () => {
+            console.log('Cleaning up keyboard event listener');
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
     const cancelBar = <div>
         <Button onClick={handleClose} secondary rounded>
             Cancel
@@ -58,11 +94,16 @@ const Lists = () => {
                                 <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-blue-500"></span>
                             </span>
                         </div>
-                        <div className="flex-1 justify-self-end p-4">
-                            <Button primary rounded onClick={() => setShowModal(true)}>
-                                <GoPlus className="mr-2" />
-                                New Chat
+                        <div className="flex flex-col justify-self-end p-4 gap-1.5">
+                            <Button primary rounded onClick={handleOpenModal} className="outline-none hover:bg-white hover:text-blue-500 font-light">
+                                <GoPlus className="mr-2 font-light" />
+                                New Space
                             </Button>
+                            <div className="flex flex-row items-center justify-end gap-1 text-gray-500 text-xs">
+                                <MdKeyboardCommandKey className="font-light" />
+                                <FaPlus className="font-bold text-[8px]" />
+                                <AiOutlineEnter className="font-extrabold" />
+                            </div>
                         </div>
                     </Link>
                     <div className="space-y-1">
@@ -70,7 +111,7 @@ const Lists = () => {
                     </div>
                 </div>
             </div>
-            {showModal && <Modal onClose={handleClose} actionBar={actionBar} cancelBar={cancelBar} spaceName={spaceName} handleSpaceNameChange={handleSpaceNameChange}/>}
+            {showModal && <Modal onClose={handleClose} actionBar={actionBar} cancelBar={cancelBar} spaceName={spaceName} onSpaceNameChange={handleSpaceNameChange} onCreateSpace={handleCreateSpace}/>}
         </div>
     )
 }
